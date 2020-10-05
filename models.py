@@ -4,10 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-
 def connect_db(app):
     """Connect to database."""
-
     db.app = app
     db.init_app(app)
 
@@ -33,6 +31,27 @@ class User(db.Model):
 
     # def set_full_name(self, name):
     #     return self.full_name = name
+
+    def get_first_name(self):
+        return self.first_name
+    
+    def get_last_name(self):
+        return self.last_name
+
+    def get_image_url(self):
+        return self.image_url
+    
+    def set_first_name(self, name):
+        self.first_name = name
+        return False
+    
+    def set_last_name(self, name):
+        self.last_name = name
+        return False
+
+    def set_image_url(self, url):
+        self.image_url = url
+        return False
 
     def __repr__(self):
         """Show info about pet."""

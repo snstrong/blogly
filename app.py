@@ -60,11 +60,20 @@ def show_edit_user_form(user_id):
 def edit_user(user_id):
     """Edit user information"""
     user = User.query.get_or_404(user_id)
-    return redirect(f"/users/{user_id}")
+    user.id = user.id
+    user.first_name = request.form['first_name']
+    user.last_name = request.form['last_name']
+    user.image_url = request.form['image_url']
+    user.image_url = user.image_url if user.image_url else "default image url"
+    db.session.add(user)
+    db.session.commit()
+    return redirect(f"/users")
 
-@app.route("/users/<int:user_id>/delete")
+@app.route("/users/<int:user_id>/delete", methods=["POST"])
 def delete_user(user_id):
     """Delete a user"""
     user = User.query.get_or_404(user_id)
+    User.query.filter_by(id=user.id).delete()
+    db.session.commit()
     return redirect("/users")
 
