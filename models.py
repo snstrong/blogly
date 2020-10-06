@@ -1,5 +1,5 @@
 """Models for Blogly."""
-
+import datetime
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -15,45 +15,44 @@ class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer,
-                   primary_key=True,
-                   autoincrement=True)
+                    primary_key=True,
+                    autoincrement=True)
     first_name = db.Column(db.String(15),
-                     nullable=False,
-                     unique=False)
+                    nullable=False,
+                    unique=False)
     last_name = db.Column(db.String(15),
-                     nullable=False,
-                     unique=False)
-    # full_name = ''
-    image_url = db.Column(db.String(), nullable=True)
-
-    # def get_full_name(self):
-    #     return f'{self.first_name} {self.last_name}'
-
-    # def set_full_name(self, name):
-    #     return self.full_name = name
-
-    def get_first_name(self):
-        return self.first_name
-    
-    def get_last_name(self):
-        return self.last_name
-
-    def get_image_url(self):
-        return self.image_url
-    
-    def set_first_name(self, name):
-        self.first_name = name
-        return False
-    
-    def set_last_name(self, name):
-        self.last_name = name
-        return False
-
-    def set_image_url(self, url):
-        self.image_url = url
-        return False
+                    nullable=False,
+                    unique=False)
+    image_url = db.Column(db.String(),
+                    nullable=True)
+    posts = db.relationship("Post",
+                    backref="user",
+                    cascade="all, delete-orphan")
 
     def __repr__(self):
-        """Show info about pet."""
+        """Show info about user."""
         i = self
         return f"<User {i.id} {i.full_name} {i.image_url}>"
+
+class Post(db.Model):
+    """Blog post"""
+    __tablename__ = "posts"
+
+    id = db.Column(db.Integer,
+                    primary_key=True,
+                    autoincrement=True)
+    title = db.Column(db.String(15),
+                    nullable=False,
+                    unique=False)
+    content = db.Column(db.String(),
+                    nullable=False,
+                    unique=True)
+    created_at = db.Column(
+        db.DateTime,
+        nullable=False,
+        default=datetime.datetime.now)
+    user_id = db.Column(db.Integer,
+                    db.ForeignKey('users.id'),
+                    nullable=False)
+    def __repr__(self):
+        """Show info about post."""
