@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Create Post{% endblock %}
+{% block content %}
+<h1>Create Post</h1>
+<form action="/users/{{user.id}}/posts/new" method="POST">
+    <div class="form-group">
+        <label for="title">Post Title:</label>
+        <input type="text" class="form-control" id="title" name="title"
+            placeholder="Life, the Universe, and Everything">
+    </div>
+    <div class="form-group">
+        <label for="content">Content:</label>
+        <textarea class="form-control" id="content" name="content" placeholder="Your words here"></textarea>
+    </div>
+    <button type="button" formaction="/users/{{user.id}}" class="btn btn-danger">Cancel</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

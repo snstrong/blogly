@@ -15,9 +15,13 @@ connect_db(app)
 # db.create_all()
 
 @app.route("/")
-def go_to_users():
+def go_to_user_list():
     """Redirects to user list."""
     return redirect("/users")
+
+#######################
+# User-related routes #
+#######################
 
 @app.route("/users")
 def show_users():
@@ -35,9 +39,7 @@ def add_user():
     """Add user and redirect to new user detail page."""
     first_name = request.form['first_name']
     last_name = request.form['last_name']
-    image_url = request.form['image_url']
-    image_url = image_url if image_url else "default image url"
-
+    image_url = request.form['image_url'] or None
     user = User(first_name=first_name, last_name=last_name, image_url=image_url)
     db.session.add(user)
     db.session.commit()
@@ -63,8 +65,7 @@ def edit_user(user_id):
     user.id = user.id
     user.first_name = request.form['first_name']
     user.last_name = request.form['last_name']
-    user.image_url = request.form['image_url']
-    user.image_url = user.image_url if user.image_url else "default image url"
+    user.image_url = request.form['image_url'] or None
     db.session.add(user)
     db.session.commit()
     return redirect(f"/users")
@@ -77,3 +78,23 @@ def delete_user(user_id):
     db.session.commit()
     return redirect("/users")
 
+#######################
+# Post-related routes #
+#######################
+
+@app.route('/users/<int:user_id>/posts/new')
+def show_new_post_form(user_id):
+    """Shows form to create new post"""
+    user = User.query.get_or_404(user_id)
+    return render_template('new_post.html', user=user)
+
+@app.route('/users/<int:user_id>/posts/new', methods=["POST"])
+def create_new_post(user_id):
+    user = User.query.get_or_404(user_id)
+    new_post = Post(title=request.form['title'],
+                    content=request.form['content'],
+                    user=user)
+
+    db.session.add(new_post)
+    db.session.commit()
+    return redirect(f'/users/{user.id}')

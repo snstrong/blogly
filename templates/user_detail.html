@@ -12,6 +12,15 @@
     <form action="/users/{{user.id}}/delete" method="POST">
         <button style="float: left;" class="btn btn-danger">Delete</button>
     </form>
+    <h2 style="clear: both;">Posts</h2>
+    <ul>
+        <li>Posts go in this list</li>
+    </ul>
+    <form action="/users/{{user.id}}/posts/new">
+        <button style="float: left;" class="btn btn-primary">Add New Post</button>
+    </form>
+
+
 </div>
 
 {% endblock %}

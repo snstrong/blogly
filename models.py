@@ -23,8 +23,10 @@ class User(db.Model):
     last_name = db.Column(db.String(15),
                     nullable=False,
                     unique=False)
+    # TODO: DEFAULT IMG URL NOT WORKING??? NEED TO FIX
     image_url = db.Column(db.String(),
-                    nullable=True)
+                    nullable=False,
+                    default="https://www.freeiconspng.com/uploads/icon-user-blue-symbol-people-person-generic--public-domain--21.png")
     posts = db.relationship("Post",
                     backref="user",
                     cascade="all, delete-orphan")
@@ -54,5 +56,8 @@ class Post(db.Model):
     user_id = db.Column(db.Integer,
                     db.ForeignKey('users.id'),
                     nullable=False)
+    
     def __repr__(self):
         """Show info about post."""
+        i = self
+        return f"<Post {i.id} {i.created_at} {i.title} {i.content}>"
