@@ -2,7 +2,7 @@
 
 from flask import Flask, request, redirect, render_template
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User, Post
+from models import db, connect_db, User, Post, Tag, PostTag
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
@@ -131,3 +131,42 @@ def delete_post(post_id):
     Post.query.filter_by(id=post.id).delete()
     db.session.commit()
     return redirect(f"/users/{user_id}")
+
+#######################
+# Tag-related routes #
+#######################
+
+@app.route("/tags")
+def list_tags():
+    """Lists all tags"""
+    pass
+
+@app.route("/tags/<int:tag_id>")
+def show_tag_detail(tag_id):
+    """Show details for given tag"""
+    pass
+
+@app.route("/tags/new")
+def show_new_tag_form():
+    """Displays form for making a new tag"""
+    pass
+
+@app.route("/tags/new", methods=["POST"])
+def create_new_tag():
+    """Handles form information for creating a new tag"""
+    return redirect("/tags")
+
+@app.route("/tags/<int:tag_id>/edit")
+def show_edit_tag_form(tag_id):
+    """Displays edit form for tag"""
+    pass
+
+@app.route("/tags/<int:tag_id>/edit", methods=["POST"])
+def edit_tag(tag_id):
+    """Handles form information for editing an existing tag"""
+    return redirect("/tags")
+
+@app.rote("/tags/<int:tag_id>/delete", methods=["POST"])
+def delete_tag(tag_id):
+    """Deletes a given tag"""
+    return redirect("/tags")
