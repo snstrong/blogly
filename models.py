@@ -23,7 +23,6 @@ class User(db.Model):
     last_name = db.Column(db.String(15),
                     nullable=False,
                     unique=False)
-    # TODO: DEFAULT IMG URL NOT WORKING??? NEED TO FIX
     image_url = db.Column(db.String(),
                     nullable=False,
                     default="https://www.freeiconspng.com/uploads/icon-user-blue-symbol-people-person-generic--public-domain--21.png")
@@ -50,9 +49,9 @@ class Post(db.Model):
                     nullable=False,
                     unique=True)
     created_at = db.Column(
-        db.DateTime,
-        nullable=False,
-        default=datetime.datetime.now)
+                    db.DateTime,
+                    nullable=False,
+                    default=datetime.datetime.now)
     user_id = db.Column(db.Integer,
                     db.ForeignKey('users.id'),
                     nullable=False)
@@ -61,3 +60,25 @@ class Post(db.Model):
         """Show info about post."""
         i = self
         return f"<Post {i.id} {i.created_at} {i.title} {i.content}>"
+
+class Tag(db.Model):
+    """Tag for post"""
+    __tablename__ = "tags"
+    id = db.Column(db.Integer,
+                    primary_key=True,
+                    autoincrement=True)
+    name = db.Column(db.String(30),
+                    nullable=False,
+                    unique=True)
+    posts = db.relationship('PostTag',
+                  backref='tags')
+
+class PostTag(db.Model):
+    """Join table for post/tag associations"""
+    __tablename__ = "post_tags"
+    post_id = db.Column(db.Integer,
+                    db.ForeignKey("posts.id"),
+                    primary_key=True)
+    tag_id = db.Column(db.Integer,
+                    db.ForeignKey("tags.id"),
+                    primary_key=True)
